@@ -39,6 +39,17 @@ const PosPage: React.FC = () => {
       return;
     }
     setLoading(true);
+
+    // GitHub Pages 등 정적 환경에서는 API 호출 없이 안내만
+    if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
+      setTimeout(() => {
+        setMessage('데모 화면입니다. 실제 적립 기능은 지원하지 않습니다.');
+        setLoading(false);
+        setPhone('');
+      }, 800);
+      return;
+    }
+
     try {
       const res1 = await fetch('/api/customers/check-or-create', {
         method: 'POST',
